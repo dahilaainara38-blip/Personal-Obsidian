@@ -5,7 +5,7 @@ domain: engineering
 tags: [concurrency, performance, os, java, redis]
 status: growing
 confidence: medium
-source_count: 1
+source_count: 5
 created: 2026-09-18
 updated: 2026-09-18
 ---
@@ -49,6 +49,15 @@ updated: 2026-09-18
 - 数据量大且写频繁 → 内存与 GC 压力失控
 - 要求强一致的读 → COW 的读天然可能拿到旧快照
 
+### Redis 场景下的两段阻塞与放大效应（2026-09-18 补充）
+
+fork 的代价不在复制内存，而在**复制页表**——内存越大页表越大，fork 阻塞主线程越久（监控 `latest_fork_usec`，超 1s 必须治理；经验线：单实例 <10GB）。fork 之后的 COW 则按被修改的页付费：**改大 Key = 复制大物理页 = 再阻塞一次**。
+
+两个生产细节：
+
+- **极端情况**：快照期间所有共享页都被改 → 内存占用翻倍，写密集场景要监控内存余量。
+- **⚠️ 内存大页（THP）把 COW 放大 512 倍**：常规页 4KB、THP 页 2MB——改 100 字节也要复制 2MB。Redis 机器应确认 THP 已关：`echo never > /sys/kernel/mm/transparent_hugepage/enabled`。
+
 ## 与其他页面的关系
 
 - 被 [[redis-persistence]] 依赖（RDB 快照的底层机制）
@@ -59,10 +68,10 @@ updated: 2026-09-18
 ## 疑点与待验证
 
 - Java 的 `CopyOnWriteArrayList` 在大列表上的真实 GC 压力量级，缺实测数据
-- Redis fork 在超大实例（数十 GB 以上）时的延迟尖刺有多严重？经验阈值待查
 - COW 与 MVCC 的边界在哪里？两者都靠"多版本"，但 COW 是复制整块、MVCC 是版本链，需要澄清
 
 ## 来源
 
-- [[redis-overview]] — 支撑了 fork + COW 的机制描述
+- [[redis-overview]] — fork + COW 的机制框架（机翻稿）
+- [[redis-aof]] / [[redis-rdb]] / [[redis-bigkey]] — 页表复制、写保护中断、大 Key 与 THP 放大的具体描述
 - Java 侧部分属于外部常识，**未经素材验证**，用时请自行核实

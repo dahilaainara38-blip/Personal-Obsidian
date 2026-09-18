@@ -75,3 +75,13 @@ updated: 2026-09-16
 - **seed 生命周期规则**：超 30 天仍无素材 → 与人确认后喂素材或降级删除
 - type 枚举补全 `index / log / roadmap`；[[roadmap]] 从 analysis 归为独立导航类型
 - **index.md 瘦身**：去掉 status / 源数列与手写统计段，只留链接 + 一句话（frontmatter 是唯一事实源）
+
+## [2026-09-18] ingest | 小林coding Redis 系列（14 篇批量）
+
+用户将 14 篇文档放入 `资料/`（第二次），已全部移入 `raw/` 并按 kebab-case 重命名，随后整批收录。除《常见面试题》为机翻稿（已标 confidence: low、结论以单篇为准）外，其余 13 篇为原创中文、质量好。
+
+- 新建 19 页：14 个 sources 摘要 + 5 个 concepts（[[cache-pitfalls]]、[[cache-coherence]]、[[redis-expiration-eviction]]、[[distributed-lock]]、[[redis-internals]]——前两个正是待建清单里"Redis 收录后暴露的最大空白"）
+- 大幅更新 5 页：[[redis]]（类型选型表、大 Key 治理、线程模型、版本演进）、[[redis-persistence]]（fsync 三档/重写/MP-AOF/混合持久化——原疑点全部补齐）、[[redis-cluster]]（复制/哨兵/Cluster 深挖、MOVED/ASK、CROSSSLOT、防脑裂参数）、[[copy-on-write]]（页表复制、THP 放大 512 倍）、[[data-sharding]]（**"为什么 16384"已解答**：心跳位图 2KB + ≤1000 节点余量 + 2^14 位运算）
+- 一次收录联动 24 页，验证了原文"一篇素材触及 10-15 页"的密度在技术类素材上同样成立（系列文批量时更高）
+- 新暴露空白已入 index 待建清单：布隆过滤器、一致性哈希、Canal、Java 客户端对比
+- 发现并标注：面试题篇与单篇冲突时以单篇为准（例：noeviction 并非"不再提供服务"，读/删仍正常）
