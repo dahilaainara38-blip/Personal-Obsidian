@@ -1,0 +1,441 @@
+/* ============ 山峰图谱 · 黑灰单色视觉体系 ============ */
+/* 画布内为纯黑灰家族（主峰金色为唯一暖色锚点），控件层用低对比深色玻璃拟态与之衔接 */
+
+.terrain-graph-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ---------- 控制栏 ---------- */
+.tg-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  align-items: center;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  background: color-mix(in srgb, var(--background-secondary) 72%, transparent);
+  font-size: 11.5px;
+  user-select: none;
+}
+
+.tg-ctl {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+.tg-ctl-label {
+  color: var(--text-faint);
+  letter-spacing: 0.4px;
+}
+
+.tg-ctl-val {
+  min-width: 20px;
+  text-align: right;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.tg-sep {
+  width: 1px;
+  height: 16px;
+  background: var(--background-modifier-border);
+}
+
+.tg-spacer {
+  flex: 1;
+}
+
+/* 自定义滑块：细轨 + 小圆钮，黑灰层次 */
+.tg-controls input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 86px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--background-modifier-border);
+  outline: none;
+  cursor: pointer;
+}
+.tg-controls input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #aeb4bf;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  transition: background 140ms ease, transform 140ms ease;
+}
+.tg-controls input[type="range"]:hover::-webkit-slider-thumb,
+.tg-controls input[type="range"]:focus-visible::-webkit-slider-thumb {
+  background: #e6e9ef;
+  transform: scale(1.12);
+}
+.tg-controls input[type="range"]::-moz-range-thumb {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #aeb4bf;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  transition: background 140ms ease;
+}
+.tg-controls input[type="range"]:hover::-moz-range-thumb {
+  background: #e6e9ef;
+}
+
+/* 按钮：描边胶囊，hover 微亮；toggle 激活态用金色呼应主峰 */
+.tg-controls .tg-btn {
+  padding: 3px 11px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 999px;
+  box-shadow: none;
+  cursor: pointer;
+  transition: color 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+.tg-controls .tg-btn:hover {
+  color: var(--text-normal);
+  border-color: var(--text-faint);
+  background: rgba(255, 255, 255, 0.04);
+}
+.tg-controls .tg-btn:active {
+  transform: translateY(0.5px);
+}
+.tg-controls .tg-toggle.is-on {
+  color: #e3c270;
+  border-color: rgba(227, 182, 83, 0.38);
+  background: rgba(227, 182, 83, 0.07);
+}
+.tg-controls .tg-action {
+  color: var(--text-normal);
+}
+
+/* 键盘焦点可见（无障碍） */
+.tg-controls .tg-btn:focus-visible,
+.tg-controls input[type="range"]:focus-visible {
+  outline: 2px solid rgba(227, 182, 83, 0.55);
+  outline-offset: 2px;
+}
+
+/* ---------- 画布 ---------- */
+.tg-canvas-wrap {
+  flex: 1;
+  position: relative;
+  min-height: 200px;
+}
+
+.tg-canvas-wrap canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+}
+
+.tg-canvas-wrap canvas.dragging {
+  cursor: grabbing;
+}
+
+/* ---------- 悬浮设置（类似官方关系图） ---------- */
+.tg-settings-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 5;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  color: rgba(210, 215, 225, 0.85);
+  background: rgba(14, 14, 19, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: color 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+.tg-settings-btn:hover {
+  color: #e3c270;
+  border-color: rgba(227, 182, 83, 0.38);
+  background: rgba(227, 182, 83, 0.08);
+}
+.tg-settings-btn:focus-visible {
+  outline: 2px solid rgba(227, 182, 83, 0.55);
+  outline-offset: 2px;
+}
+
+.tg-settings-panel {
+  position: absolute;
+  top: 50px;
+  right: 12px;
+  z-index: 5;
+  width: 248px;
+  padding: 6px 0 8px;
+  font-size: 12px;
+  color: var(--text-normal);
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+.tg-settings-panel.hidden {
+  display: none;
+}
+
+/* 分区标题（仿官方关系图设置） */
+.tg-set-section {
+  padding: 8px 14px 4px;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-muted);
+}
+
+/* 设置行：标签左、控件右 */
+.tg-set-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 14px;
+}
+.tg-set-row + .tg-set-row {
+  border-top: 1px solid var(--background-modifier-border);
+}
+.tg-set-label {
+  font-size: 12px;
+  color: var(--text-normal);
+}
+.tg-set-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tg-set-val {
+  min-width: 24px;
+  text-align: right;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 滑块：细轨 + 小圆钮 */
+.tg-settings-panel input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 108px;
+  height: 3px;
+  padding: 0;
+  border-radius: 2px;
+  background: var(--background-modifier-border);
+  outline: none;
+  cursor: pointer;
+}
+.tg-settings-panel input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 7px;
+  height: 7px;
+  margin-top: -2px; /* 3px 轨道上垂直居中 */
+  border-radius: 50%;
+  background: var(--interactive-accent, #aeb4bf);
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: background 140ms ease, transform 140ms ease;
+}
+.tg-settings-panel input[type="range"]:hover::-webkit-slider-thumb,
+.tg-settings-panel input[type="range"]:focus-visible::-webkit-slider-thumb {
+  background: var(--interactive-accent-hover, #e6e9ef);
+  transform: scale(1.1);
+}
+.tg-settings-panel input[type="range"]::-moz-range-thumb {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--interactive-accent, #aeb4bf);
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  transition: background 140ms ease;
+}
+.tg-settings-panel input[type="range"]:hover::-moz-range-thumb {
+  background: var(--interactive-accent-hover, #e6e9ef);
+}
+
+/* 自定义开关（不依赖 Obsidian 内部样式，保证可见可点） */
+.tg-switch {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 17px;
+  flex: none;
+  cursor: pointer;
+}
+.tg-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.tg-switch-track {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: var(--background-modifier-border);
+  transition: background 150ms ease;
+}
+.tg-switch-track::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: transform 150ms ease, background 150ms ease;
+}
+.tg-switch input:checked + .tg-switch-track {
+  background: rgba(227, 182, 83, 0.35);
+}
+.tg-switch input:checked + .tg-switch-track::after {
+  transform: translateX(13px);
+  background: #e3b653;
+}
+.tg-switch:focus-within {
+  outline: 2px solid rgba(227, 182, 83, 0.55);
+  outline-offset: 2px;
+}
+
+/* 底部操作 */
+.tg-set-footer {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 8px 14px 0;
+  border-top: 1px solid var(--background-modifier-border);
+}
+.tg-set-btn {
+  flex: 1;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+.tg-set-btn:hover {
+  color: var(--text-normal);
+  border-color: var(--text-faint);
+  background: rgba(255, 255, 255, 0.03);
+}
+.tg-set-note {
+  padding: 8px 14px 0;
+  font-size: 10.5px;
+  letter-spacing: 0.2px;
+  color: var(--text-faint);
+  text-align: center;
+}
+.tg-settings-row {
+  display: flex;
+  gap: 8px;
+}
+.tg-settings-row .tg-btn {
+  flex: 1;
+  justify-content: center;
+}
+.tg-settings-panel .tg-btn.tg-full {
+  width: 100%;
+}
+
+/* 悬浮信息（右下角）：主峰/悬停 chip + 统计 */
+.tg-info {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  pointer-events: none;
+}
+.tg-info .tg-chip {
+  max-width: 75%;
+  font-size: 10.5px;
+  padding: 1px 8px;
+}
+.tg-info-stats {
+  font-size: 10.5px;
+  letter-spacing: 0.2px;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 状态栏：chips + 右侧统计 ---------- */
+.tg-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 12px;
+  font-size: 11px;
+  color: var(--text-faint);
+  border-top: 1px solid var(--background-modifier-border);
+  background: color-mix(in srgb, var(--background-secondary) 72%, transparent);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.tg-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--background-modifier-border);
+  color: var(--text-muted);
+  max-width: 46%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tg-chip-main {
+  color: #e3c270;
+  border-color: rgba(227, 182, 83, 0.3);
+  background: rgba(227, 182, 83, 0.06);
+  font-weight: 500;
+}
+
+.tg-chip-main .tg-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #e3b653;
+  box-shadow: 0 0 5px rgba(227, 182, 83, 0.7);
+  flex: none;
+}
+
+.tg-chip-hover {
+  color: var(--text-normal);
+}
+
+.tg-chip.tg-hidden {
+  display: none;
+}
+
+.tg-status-right {
+  margin-left: auto;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

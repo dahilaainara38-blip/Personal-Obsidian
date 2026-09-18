@@ -1,0 +1,9 @@
+{
+  "id": "terrain-graph",
+  "name": "Terrain Graph",
+  "version": "0.1.1",
+  "minAppVersion": "1.4.0",
+  "description": "把关系图谱渲染成 3D 山峰等高线图：链接越多的文档海拔越高，联系紧密的文档聚成一座山，最高连接数的文档是主峰。",
+  "author": "gjckckfc",
+  "isDesktopOnly": false
+}

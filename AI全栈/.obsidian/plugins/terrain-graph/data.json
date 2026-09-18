@@ -1,0 +1,12 @@
+{
+  "levels": 32,
+  "bandwidth": 50,
+  "showDocs": true,
+  "showNames": true,
+  "highlightMode": true,
+  "nodeThreshold": 3,
+  "ghostNodes": true,
+  "includeAttachments": true,
+  "includeOrphans": false,
+  "includeUnresolved": false
+}

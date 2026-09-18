@@ -33,7 +33,7 @@ AI全栈/
 ├── raw/                   # 原始素材（不可变）
 │   ├── assets/            #   图片与附件（Obsidian 附件目录指向此处）
 │   └── *.md / *.pdf / *   #   素材文件
-└── wiki/                  # Agent 维护的知识库
+├── wiki/                  # Agent 维护的知识库
     ├── index.md           #   内容索引（每次收录后必须更新）
     ├── log.md             #   操作日志（append-only）
     ├── overview.md        #   总览与当前认知状态
@@ -44,6 +44,9 @@ AI全栈/
     ├── concepts/          #   概念页：抽象的原理、模式、方法论
     ├── analyses/          #   分析页：对比、选型、综合论证
     └── practices/         #   实践页：可复用代码骨架、配置、清单、踩坑
+└── tools/                 # 确定性脚本（人建，Agent 可用不可改）
+    ├── lint.sh            #   机械检查：死链/孤儿/index 一致/frontmatter/log 格式/seed 老化
+    └── stats.sh           #   统计打印（index.md 不再手写统计）
 ```
 
 ### 页面类型判定
@@ -67,7 +70,7 @@ AI全栈/
 ```yaml
 ---
 title: Spring AI
-type: entity            # source | entity | concept | analysis | practice | overview
+type: entity            # source | entity | concept | analysis | practice | overview | index | log | roadmap
 domain: ai              # java | ai | data | infra | frontend | engineering
 tags: [framework, llm, spring]
 status: seed            # seed | growing | stable | stale | contested
@@ -80,7 +83,7 @@ updated: 2026-09-16
 
 字段含义：
 - `status`
-  - `seed` 初始化骨架，尚无素材支撑
+  - `seed` 初始化骨架，尚无素材支撑。**超 30 天仍 `source_count: 0`（lint.sh 第 6 项会报）：与人确认后要么尽快喂素材，要么降级为 [[roadmap]] 一行待办并删除页面——不许无限期沉淀成"看起来像定论"**
   - `growing` 已有素材但结论未稳
   - `stable` 多源交叉验证，可放心引用
   - `stale` 已知滞后于新信息，待更新
@@ -121,6 +124,11 @@ updated: 2026-09-16
 - **禁止**：创建空页面占位。要么写有内容，要么不建。
 - **禁止**：中文文件名、空格文件名、大写文件名。
 
+### 3.4 index.md 与统计
+
+- index 只做目录：**链接 + 一句话**（sources 表可加收录日期）。**不加 status / 源数列** —— frontmatter 是唯一事实源，双份维护必然漂移。
+- 统计不手写，按需跑 `bash tools/stats.sh`。
+
 ---
 
 ## 4. 三个核心操作
@@ -141,6 +149,7 @@ updated: 2026-09-16
 7. **更索引**：更新 `wiki/index.md`，新页面入目录。
 8. **记日志**：向 `wiki/log.md` 追加：`## [YYYY-MM-DD] ingest | <素材名> | 新建 N 页 / 更新 M 页`
 9. **报**：向人报告改了哪些文件、有哪些新发现、有哪些矛盾。
+10. **提交**：`git add -A && git commit -m "ingest | <素材名>" && git push`（推送失败不阻塞，本地 commit 照做）。
 
 一次收录通常联动 5-15 个页面，这是正常的，不要为了少改文件而省略。
 
@@ -153,24 +162,34 @@ updated: 2026-09-16
 2. 作答必须带 `[[页面链接]]` 引用，让人能点进去核对。
 3. 若 wiki 里没有答案：明确说"wiki 暂无"，然后从 `raw/` 或联网补齐，并**在回答后询问是否顺手收录进 wiki**。
 4. **好答案要落盘**：对比表、选型结论、架构分析、这次想明白的东西 —— 一律写成 `wiki/analyses/` 或 `wiki/practices/` 的新页面，别让它烂在聊天记录里。
-5. 记日志：`## [YYYY-MM-DD] query | <问题摘要>`
+5. 记日志：`## [YYYY-MM-DD] query | <问题摘要>`；若本轮有页面落盘，同样 git commit（`query | <问题摘要>`）并 push。
 
 ### 4.3 Lint — 健康检查
 
 触发：人说"体检"、"lint"，或每收录 10 份素材后主动建议一次。
 
-检查项：
-- [ ] 孤儿页：无任何入链的页面
-- [ ] 死链：指向不存在页面的链接
-- [ ] `status: contested` 的矛盾是否已解决
-- [ ] `status: stale` 的页面（尤其版本号、API 签名）—— 建议联网核实
-- [ ] 被反复提及但没有独立页面的概念
-- [ ] 缺失的交叉引用（A 提到 B 但没链过去）
-- [ ] `source_count: 0` 且 `status: seed` 的页面是否已该填充或删除
-- [ ] `index.md` 是否与实际文件一致
+流程（双轨制）：
 
-输出：按严重程度排序的问题清单 + 建议的下一步（补哪个源、问哪个问题）。
-记日志：`## [YYYY-MM-DD] lint | 发现 N 个问题`
+1. **先跑脚本**（机械检查，确定性、零漂移）：`bash tools/lint.sh`
+   覆盖：死链 · 孤儿页 · index 与文件系统双向一致 · frontmatter 完整性与取值 · log 条目格式 · seed 老化。
+   脚本结果原样转达，不逐条复述。
+2. **再做语义检查**（LLM 才做得来的部分）：
+   - [ ] `status: contested` 的矛盾是否已解决
+   - [ ] `status: stale` 的页面（尤其版本号、API 签名）—— 建议联网核实
+   - [ ] 被反复提及但没有独立页面的概念
+   - [ ] 缺失的交叉引用（A 提到 B 但没链过去）
+   - [ ] 各页"疑点与待验证"里积压最久、价值最高的几条 —— 给出查证优先级
+3. 输出：脚本结果 + 语义问题（按严重程度排序）+ 建议的下一步（补哪个源、问哪个问题）。
+4. 记日志并 git commit：`lint | 发现 N 个问题`
+
+### 4.4 并发与写入纪律
+
+多个客户端（Claude Code / Claudian / workbuddy）共用本仓库，靠纪律 + git 兜底：
+
+- **同一时刻只进行一次收录。** 开工前先 `git pull --rebase`；若 `wiki/log.md` 最后一条距今不足 10 分钟，先与人确认没有另一个会话正在跑。
+- **`log.md` 只允许在文件末尾追加**，禁止整文件重写、禁止修改历史条目。
+- **落盘即提交**：每次 ingest / query 落盘 / lint 修复后立即 commit 并 push，不要攒。
+- 工作区若有非自己产生的未提交改动：先 `git status` 看清并报告给人，不盲目覆盖。
 
 ---
 
@@ -217,6 +236,7 @@ updated: 2026-09-16
 |---|---|
 | 收录 / ingest | 执行 4.1 |
 | 体检 / lint | 执行 4.3 |
+| 统计 / stats | 跑 `bash tools/stats.sh` 打印知识库现状 |
 | 索引 | 重建 `wiki/index.md` |
 | 路线 | 打开/更新 `wiki/roadmap.md` |
 | 归档本次讨论 | 把本轮对话的结论落成 wiki 页面 |

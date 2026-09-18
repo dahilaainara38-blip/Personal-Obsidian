@@ -63,3 +63,15 @@ updated: 2026-09-16
 - 新增 `status: growing` 6 页，`seed` 仍为 15 页
 - **主要问题：AI 侧 15 个种子页全部 `source_count: 0`**，知识库呈现"data 域有料、ai 域空转"的失衡状态
 - 建议下一步：优先收录 Spring AI 或 LangChain4j 官方文档
+
+## [2026-09-18] schema | 接入 git 工作流 + lint 双轨制 + index 瘦身
+
+知识库接入 git 远程（Personal-Obsidian，main），并把账面工作从模型自律改为机械保证：
+
+- 新增 `tools/lint.sh`（死链 / 孤儿页 / index↔文件系统 / frontmatter / log 格式 / seed 老化）与 `tools/stats.sh`（统计打印）。首跑全部通过。
+- **lint 改双轨制**（AGENTS.md §4.3）：脚本管机械检查，LLM 只做语义检查（矛盾 / 缺交叉引用 / 查证优先级）
+- **ingest 增加第 10 步**：收录完成即 `git add -A && git commit && git push`；query 落盘同样提交
+- **新增 §4.4 并发与写入纪律**：同一时刻一次收录、开工前 `git pull --rebase`、log.md 只许末尾追加、落盘即提交
+- **seed 生命周期规则**：超 30 天仍无素材 → 与人确认后喂素材或降级删除
+- type 枚举补全 `index / log / roadmap`；[[roadmap]] 从 analysis 归为独立导航类型
+- **index.md 瘦身**：去掉 status / 源数列与手写统计段，只留链接 + 一句话（frontmatter 是唯一事实源）

@@ -7,13 +7,13 @@ status: growing
 confidence: high
 source_count: 0
 created: 2026-09-16
-updated: 2026-09-16
+updated: 2026-09-18
 ---
 
 # 索引
 
 > 全量页面目录。**每次 ingest / 新建页面后必须更新本文件。**
-> 图例：`seed` 种子未验证 · `growing` 有源未稳 · `stable` 多源可引用 · `stale` 待更新 · `contested` 有矛盾
+> 只做目录（链接 + 一句话）；状态与源数看各页 frontmatter，统计跑 `bash tools/stats.sh`。
 
 ## 导航
 
@@ -26,40 +26,39 @@ updated: 2026-09-16
 
 ## 概念（concepts/）— 抽象原理与模式
 
-| 页面 | 一句话 | domain | status | 源数 |
-|---|---|---|---|---|
-| [[rag\|RAG]] | 先检索再生成，解决私有数据、时效与幻觉 | ai | seed | 0 |
-| [[agent\|Agent]] | LLM + 工具 + 记忆 + 规划循环，自主决定下一步 | ai | seed | 0 |
-| [[tool-calling\|Tool Calling]] | 模型出调用意图、你的代码执行，是 Agent 的地基 | ai | seed | 0 |
-| [[mcp\|MCP]] | 模型上下文协议，AI 应用的 USB-C 接口 | ai | seed | 0 |
-| [[prompt-engineering\|Prompt 工程]] | 把模糊意图翻译成模型能稳定执行的规格 | ai | seed | 0 |
-| [[redis-persistence\|Redis 持久化]] | 无/RDB/AOF/混合，靠 fork + COW 不阻塞主线程 | data | growing | 1 |
-| [[redis-cluster\|Redis 高可用与集群]] | 单实例→主从→Sentinel→Cluster 四档阶梯 | data | growing | 1 |
-| [[data-sharding\|数据分片]] | 哈希槽用一层间接解决取模分片的映射漂移 | data | growing | 1 |
-| [[copy-on-write\|写时复制]] | 读时共享、写时才复制；横跨 OS fork 与 Java 并发容器 | engineering | growing | 1 |
+| 页面 | 一句话 |
+|---|---|
+| [[rag\|RAG]] | 先检索再生成，解决私有数据、时效与幻觉 |
+| [[agent\|Agent]] | LLM + 工具 + 记忆 + 规划循环，自主决定下一步 |
+| [[tool-calling\|Tool Calling]] | 模型出调用意图、你的代码执行，是 Agent 的地基 |
+| [[mcp\|MCP]] | 模型上下文协议，AI 应用的 USB-C 接口 |
+| [[prompt-engineering\|Prompt 工程]] | 把模糊意图翻译成模型能稳定执行的规格 |
+| [[redis-persistence\|Redis 持久化]] | 无/RDB/AOF/混合，靠 fork + COW 不阻塞主线程 |
+| [[redis-cluster\|Redis 高可用与集群]] | 单实例→主从→Sentinel→Cluster 四档阶梯 |
+| [[data-sharding\|数据分片]] | 哈希槽用一层间接解决取模分片的映射漂移 |
+| [[copy-on-write\|写时复制]] | 读时共享、写时才复制；横跨 OS fork 与 Java 并发容器 |
 
 ## 实体（entities/）— 具体框架与工具
 
-| 页面 | 一句话 | domain | status | 源数 |
-|---|---|---|---|---|
-| [[spring-ai\|Spring AI]] | Spring 官方 AI 框架，「AI 世界的 JDBC」，基础设施层 | ai | seed | 0 |
-| [[langchain4j\|LangChain4j]] | 社区驱动的全功能 LLM 工具箱，应用框架层 | ai | seed | 0 |
-| [[spring-ai-alibaba\|Spring AI Alibaba]] | 阿里系 Agent 全家桶，国内落地路径 | ai | seed | 0 |
-| [[agentscope-java\|AgentScope Java]] | 阿里开源生产级多 Agent 框架 | ai | seed | 0 |
-| [[redis\|Redis]] | 内存数据结构服务器，架在数据库前做加速层 | data | growing | 1 |
+| 页面 | 一句话 |
+|---|---|
+| [[spring-ai\|Spring AI]] | Spring 官方 AI 框架，「AI 世界的 JDBC」，基础设施层 |
+| [[langchain4j\|LangChain4j]] | 社区驱动的全功能 LLM 工具箱，应用框架层 |
+| [[spring-ai-alibaba\|Spring AI Alibaba]] | 阿里系 Agent 全家桶，国内落地路径 |
+| [[agentscope-java\|AgentScope Java]] | 阿里开源生产级多 Agent 框架 |
+| [[redis\|Redis]] | 内存数据结构服务器，架在数据库前做加速层 |
 
 ## 分析（analyses/）— 对比与综合结论
 
-| 页面 | 一句话 | domain | status | 源数 |
-|---|---|---|---|---|
-| [[java-ai-framework-selection\|Java AI 框架选型]] | 不是五选一，是「基座 + 按需叠加」，附决策树 | ai | seed | 0 |
-| [[roadmap]] | Java+AI 全栈六阶段学习路线 | engineering | seed | 0 |
+| 页面 | 一句话 |
+|---|---|
+| [[java-ai-framework-selection\|Java AI 框架选型]] | 不是五选一，是「基座 + 按需叠加」，附决策树 |
 
 ## 实践（practices/）— 能抄走用的
 
-| 页面 | 一句话 | domain | status | 源数 |
-|---|---|---|---|---|
-| [[java-ai-project-skeleton\|Java AI 项目标准骨架]] | 四层包结构 + prompt 外置 + 上线检查清单 | java | seed | 0 |
+| 页面 | 一句话 |
+|---|---|
+| [[java-ai-project-skeleton\|Java AI 项目标准骨架]] | 四层包结构 + prompt 外置 + 上线检查清单 |
 
 ## 素材摘要（sources/）
 
@@ -87,12 +86,3 @@ updated: 2026-09-16
 - [ ] `concepts/virtual-threads.md` — 影响 AI 高并发流式场景
 - [ ] `practices/llm-observability.md`
 - [ ] `practices/rag-tuning-checklist.md`
-
-## 统计
-
-- 页面总数：23（含本页）
-- 素材数：2
-- `status: seed` 页面：15 —— **AI 侧全部未验证，不要直接用于选型**
-- `status: growing` 页面：6 —— Redis 相关，已有素材支撑但结论未稳
-- `source_count > 0` 页面：7
-- 领域分布：ai 9 · data 5 · engineering 5 · 元页面 4

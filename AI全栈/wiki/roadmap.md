@@ -1,6 +1,6 @@
 ---
 title: Java + AI 全栈学习路线
-type: analysis
+type: roadmap
 domain: engineering
 tags: [meta, architecture, selection]
 status: seed
