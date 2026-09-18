@@ -1,0 +1,7 @@
+# macOS
+.DS_Store
+
+# Obsidian 机器相关的易变文件（换台机器/同时开两个客户端会互相打架，不同步）
+**/.obsidian/workspace.json
+**/.obsidian/workspace-mobile.json
+**/.obsidian/cache/
