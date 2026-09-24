@@ -85,3 +85,13 @@ updated: 2026-09-16
 - 一次收录联动 24 页，验证了原文"一篇素材触及 10-15 页"的密度在技术类素材上同样成立（系列文批量时更高）
 - 新暴露空白已入 index 待建清单：布隆过滤器、一致性哈希、Canal、Java 客户端对比
 - 发现并标注：面试题篇与单篇冲突时以单篇为准（例：noeviction 并非"不再提供服务"，读/删仍正常）
+
+## [2026-09-24] ingest | KV 存储对比与 Raft | 新建 5 页 / 更新 2 页
+
+素材为 CSDN 2021 年文章，前半选型对比、后半 Raft/Paxos 算法（引自极客时间专栏）。原名中文长文件名，已重命名 `raw/kv-stores-comparison-raft.md`。
+
+- 新建：`sources/kv-stores-comparison-raft.md`、`entities/etcd.md`、`entities/zookeeper.md`、`concepts/raft.md`、`concepts/paxos.md`
+- 更新：`entities/redis.md`（source_count 16→17，Memcached 结论交叉验证）、`index.md`
+- 交叉验证：Redis 赢 Memcached 靠数据结构而非性能 —— 与 redis-overview 互相印证，无矛盾
+- 知识库首次进入「元数据/共识」子域：Raft 的 Quorum 过半思想与 Sentinel quorum、分片 rehash 一族形成呼应
+- 新空白：注册中心选型（etcd vs Nacos vs Consul）入待建清单

@@ -7,7 +7,7 @@ status: growing
 confidence: high
 source_count: 0
 created: 2026-09-16
-updated: 2026-09-18
+updated: 2026-09-24
 ---
 
 # 索引
@@ -42,6 +42,8 @@ updated: 2026-09-18
 | [[redis-expiration-eviction\|过期删除与内存淘汰]] | 惰性+定期删到期的；8 种策略删超内存的 |
 | [[distributed-lock\|分布式锁]] | SET NX EX + Lua 释放 + 看门狗 + Redlock 及其争议 |
 | [[redis-internals\|Redis 底层数据结构]] | SDS→listpack 演进史、跳表、渐进式 rehash |
+| [[raft\|Raft 共识算法]] | 选 Leader、日志过半即提交；etcd/TiDB 的共识内核 |
+| [[paxos\|Paxos 共识算法]] | 理论基石；两阶段、三角色；难实现故被 Raft 取代 |
 
 ## 实体（entities/）— 具体框架与工具
 
@@ -52,6 +54,8 @@ updated: 2026-09-18
 | [[spring-ai-alibaba\|Spring AI Alibaba]] | 阿里系 Agent 全家桶，国内落地路径 |
 | [[agentscope-java\|AgentScope Java]] | 阿里开源生产级多 Agent 框架 |
 | [[redis\|Redis]] | 内存数据结构服务器：9 种类型选型、大 Key 治理、线程模型 |
+| [[etcd\|etcd]] | 元数据存储 + Raft + watch；K8s 的心脏；新项目默认选它 |
+| [[zookeeper\|Zookeeper]] | 旧王：ZAB + 树形 ZNode；存量维护与面试仍需 |
 
 ## 分析（analyses/）— 对比与综合结论
 
@@ -84,7 +88,8 @@ updated: 2026-09-18
 | [[redis-cluster-why\|为什么要有 Redis Cluster]] | Smart Client；MOVED/ASK；Gossip；为什么 16384 | 2026-09-18 |
 | [[redis-data-types\|数据类型与应用场景]] | 5+4 类型选型表；Stream 当 MQ 的边界 | 2026-09-18 |
 | [[redis-data-structures\|底层数据结构]] | 9 种结构；连锁更新→listpack 演进 | 2026-09-18 |
-| [[redis-interview-qa\|Redis 常见面试题（⚠️ 机翻）]] | 仅当索引；增量：线程模型、过期键×持久化、三策略 | 2026-09-18 |
+| [[redis-interview-qa\|Redis 常见面试题（⚠️ 机翻）]] | 仅当索引；增量：线程模型、过期键×持久化、三策略 |
+| [[kv-stores-comparison-raft\|KV 存储对比与 Raft（CSDN）]] | 四件套两世界分工 + Raft/Paxos 全流程（2021 年文） | 2026-09-24 | 2026-09-18 |
 
 ## 待建页面（被引用但尚未创建）
 
@@ -104,9 +109,10 @@ updated: 2026-09-18
 - [ ] `practices/llm-observability.md`
 - [ ] `practices/rag-tuning-checklist.md`
 
-**data 侧（Redis 系列后暴露的新空白）**
+**data/infra 侧**
 - [ ] `concepts/bloom-filter.md` — 布隆过滤器原理与误判率设计 —— [[cache-pitfalls]] 依赖
 - [ ] `concepts/consistent-hashing.md` — 与 [[data-sharding]] 哈希槽路线对照；也是 [[distributed-lock]] 的替代方案
 - [ ] `entities/canal.md` — binlog 订阅组件，[[cache-coherence]] 的关键拼图
 - [ ] `analyses/redis-java-clients.md` — Jedis/Lettuce/Redisson 对比（Cluster 拓扑刷新、看门狗）—— [[redis]] 疑点
-- [ ] `concepts/cache-pitfalls.md` ✅ 已建 · ~~`concepts/cache-coherence.md`~~ ✅ 已建（2026-09-18）
+- [ ] `entities/etcd` ✅ 已建 · `entities/zookeeper` ✅ 已建 · `concepts/raft` ✅ 已建 · `concepts/paxos` ✅ 已建（2026-09-24）
+- [ ] `analyses/registry-center-selection.md` — 注册中心选型（etcd vs Nacos vs Consul，国内场景）—— [[etcd]] 疑点，Java 全栈高频

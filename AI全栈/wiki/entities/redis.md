@@ -5,9 +5,9 @@ domain: data
 tags: [redis, cache, data]
 status: growing
 confidence: medium
-source_count: 16
+source_count: 17
 created: 2026-09-18
-updated: 2026-09-18
+updated: 2026-09-24
 ---
 
 # Redis
@@ -71,6 +71,7 @@ updated: 2026-09-18
 ## 来源
 
 - [[redis-overview]] — 定位、Memcached 对比、部署阶梯（机翻稿，已被后续单篇交叉验证）
+- [[kv-stores-comparison-raft]] — Memcached 对比交叉验证（"Memcached 性能稍好，Redis 赢在数据结构与可用性"，与 overview 互相印证）；KV 存储按"业务数据 vs 元数据"的分工视角
 - [[redis-interview-qa]] — 线程模型、大 key 定义与治理、事务无回滚、Stream 边界（机翻稿，结论以单篇为准）
 - [[redis-data-types]] / [[redis-data-structures]] — 数据类型场景表、版本演进里程碑
 - [[redis-bigkey]] — 大 key 对持久化/网络/集群的危害
