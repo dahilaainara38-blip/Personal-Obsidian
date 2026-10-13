@@ -95,3 +95,14 @@ updated: 2026-09-16
 - 交叉验证：Redis 赢 Memcached 靠数据结构而非性能 —— 与 redis-overview 互相印证，无矛盾
 - 知识库首次进入「元数据/共识」子域：Raft 的 Quorum 过半思想与 Sentinel quorum、分片 rehash 一族形成呼应
 - 新空白：注册中心选型（etcd vs Nacos vs Consul）入待建清单
+
+## [2026-10-13] ingest | Java 集合框架入门手册（CSDN） | 新建 4 页 / 更新 5 页
+
+素材为 2021 年 CSDN 入门稿，正文可建立接口与实现类地图，但包含多项概念错误；本次以 Oracle JDK 21 文档与本机 Temurin OpenJDK 21.0.9 源码补齐底层结论。
+
+- 新建：`sources/csdn-java-collections-framework.md`、`entities/java-collections-framework.md`、`concepts/java-collections-internals.md`、`practices/java-collections-code-recipes.md`
+- 更新：`wiki/index.md`、`wiki/roadmap.md`、`concepts/copy-on-write.md`、`wiki/overview.md`、`wiki/log.md`
+- 修正原文错误：Collection/Set/Queue/Map 的“有序/无序”表述不成立；Map key 不可能重复；Object[] 示例错误；Vector/Stack 不应作为现代默认选型
+- 补足原文未覆盖内容：ArrayList 懒分配与扩容、HashMap 哈希扰动/扩容/树化、fail-fast 边界、不可变集合、并发复合操作的原子性
+- 实践页完整程序已在本机 JDK 21.0.9 编译运行，覆盖迭代删除、toArray、Map.merge、Collections.synchronizedList 与可变 key 陷阱
+- 新暴露空白：集合真实性能需要 JMH；LinkedHashMap LRU 与 Caffeine 对比待补；JDK 17/21 基线需与项目确认

@@ -7,7 +7,7 @@ status: growing
 confidence: high
 source_count: 0
 created: 2026-09-16
-updated: 2026-09-24
+updated: 2026-10-13
 ---
 
 # 索引
@@ -44,6 +44,7 @@ updated: 2026-09-24
 | [[redis-internals\|Redis 底层数据结构]] | SDS→listpack 演进史、跳表、渐进式 rehash |
 | [[raft\|Raft 共识算法]] | 选 Leader、日志过半即提交；etcd/TiDB 的共识内核 |
 | [[paxos\|Paxos 共识算法]] | 理论基石；两阶段、三角色；难实现故被 Raft 取代 |
+| [[java-collections-internals\|Java 集合底层原理]] | ArrayList 扩容、HashMap 哈希/树化与 fail-fast |
 
 ## 实体（entities/）— 具体框架与工具
 
@@ -56,6 +57,7 @@ updated: 2026-09-24
 | [[redis\|Redis]] | 内存数据结构服务器：9 种类型选型、大 Key 治理、线程模型 |
 | [[etcd\|etcd]] | 元数据存储 + Raft + watch；K8s 的心脏；新项目默认选它 |
 | [[zookeeper\|Zookeeper]] | 旧王：ZAB + 树形 ZNode；存量维护与面试仍需 |
+| [[java-collections-framework\|Java 集合框架]] | Collection/Map 接口体系、实现类选型与 JDK 21 有序接口 |
 
 ## 分析（analyses/）— 对比与综合结论
 
@@ -68,6 +70,7 @@ updated: 2026-09-24
 | 页面 | 一句话 |
 |---|---|
 | [[java-ai-project-skeleton\|Java AI 项目标准骨架]] | 四层包结构 + prompt 外置 + 上线检查清单 |
+| [[java-collections-code-recipes\|Java 集合代码与踩坑]] | 可运行示例、遍历删除、Map 归并、并发与可变 key |
 
 ## 素材摘要（sources/）
 
@@ -88,8 +91,9 @@ updated: 2026-09-24
 | [[redis-cluster-why\|为什么要有 Redis Cluster]] | Smart Client；MOVED/ASK；Gossip；为什么 16384 | 2026-09-18 |
 | [[redis-data-types\|数据类型与应用场景]] | 5+4 类型选型表；Stream 当 MQ 的边界 | 2026-09-18 |
 | [[redis-data-structures\|底层数据结构]] | 9 种结构；连锁更新→listpack 演进 | 2026-09-18 |
-| [[redis-interview-qa\|Redis 常见面试题（⚠️ 机翻）]] | 仅当索引；增量：线程模型、过期键×持久化、三策略 |
-| [[kv-stores-comparison-raft\|KV 存储对比与 Raft（CSDN）]] | 四件套两世界分工 + Raft/Paxos 全流程（2021 年文） | 2026-09-24 | 2026-09-18 |
+| [[redis-interview-qa\|Redis 常见面试题（⚠️ 机翻）]] | 仅当索引；增量：线程模型、过期键×持久化、三策略 | 2026-09-18 |
+| [[kv-stores-comparison-raft\|KV 存储对比与 Raft（CSDN）]] | 四件套两世界分工 + Raft/Paxos 全流程（2021 年文） | 2026-09-24 |
+| [[csdn-java-collections-framework\|Java 集合框架入门手册（CSDN）]] | 接口与实现类地图；原文含多处错误（⚠️ 二手稿） | 2026-10-13 |
 
 ## 待建页面（被引用但尚未创建）
 

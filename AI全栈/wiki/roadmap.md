@@ -7,7 +7,7 @@ status: seed
 confidence: medium
 source_count: 0
 created: 2026-09-16
-updated: 2026-09-16
+updated: 2026-10-13
 ---
 
 # Java + AI 全栈学习路线
@@ -27,9 +27,10 @@ updated: 2026-09-16
 - 虚拟线程（Project Loom）与结构化并发 —— 直接影响 AI 应用的高并发流式场景
 - record / sealed / pattern matching —— 写 AI 的 DTO 与消息结构很顺手
 - JVM：内存模型、GC 选型、排障工具（jfr / async-profiler）
+- 集合框架：接口契约、ArrayList/HashMap 底层、并发容器选型与常见踩坑 —— 见 [[java-collections-framework]]
 - Spring Boot 3：自动配置原理、Actuator、Observation API（**这是后面接 AI 可观测的地基**）
 
-该建/填的页面：`entities/spring-boot.md`、`concepts/virtual-threads.md`、`concepts/jvm-tuning.md`
+该建/填的页面：[[java-collections-framework|Java 集合框架]]、[[java-collections-internals|Java 集合底层原理]]、[[java-collections-code-recipes|Java 集合代码与踩坑]]、`entities/spring-boot.md`、`concepts/virtual-threads.md`、`concepts/jvm-tuning.md`
 
 ## 阶段 2 · AI 基础原理（2-3 周）
 

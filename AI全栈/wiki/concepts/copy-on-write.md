@@ -7,7 +7,7 @@ status: growing
 confidence: medium
 source_count: 5
 created: 2026-09-18
-updated: 2026-09-18
+updated: 2026-10-13
 ---
 
 # 写时复制（Copy-on-Write, COW）
@@ -62,7 +62,7 @@ fork 的代价不在复制内存，而在**复制页表**——内存越大页�
 
 - 被 [[redis-persistence]] 依赖（RDB 快照的底层机制）
 - 上层实体：[[redis]]
-- Java 侧对应：`CopyOnWriteArrayList` / `CopyOnWriteArraySet`（`java.util.concurrent`）
+- Java 侧对应：[[java-collections-framework|Java 集合框架]] 中的 `CopyOnWriteArrayList` / `CopyOnWriteArraySet`；实现取舍见 [[java-collections-internals|底层原理]] 与 [[java-collections-code-recipes|代码实践]]
 - 同族思路：MVCC、快照隔离 —— 都是"用版本/副本来避免阻塞读"
 
 ## 疑点与待验证
@@ -74,4 +74,4 @@ fork 的代价不在复制内存，而在**复制页表**——内存越大页�
 
 - [[redis-overview]] — fork + COW 的机制框架（机翻稿）
 - [[redis-aof]] / [[redis-rdb]] / [[redis-bigkey]] — 页表复制、写保护中断、大 Key 与 THP 放大的具体描述
-- Java 侧部分属于外部常识，**未经素材验证**，用时请自行核实
+- Java 侧部分已按本机 Temurin OpenJDK 21.0.9 API/源码复核，并归入 [[java-collections-framework]]（核实日期：2026-10-13）
